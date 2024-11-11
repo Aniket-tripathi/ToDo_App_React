@@ -1,50 +1,57 @@
 import React, { useState } from "react";
-import "bootstrap/dist/css/bootstrap.css";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Button from "react-bootstrap/Button";
-import InputGroup from "react-bootstrap/InputGroup";
-import FormControl from "react-bootstrap/FormControl";
-import ListGroup from "react-bootstrap/ListGroup";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
-import "./App.css"; // Create this file for custom CSS animations
+import "bootstrap/dist/css/bootstrap.css"; // Import Bootstrap styles
+import Container from "react-bootstrap/Container"; // Bootstrap container
+import Row from "react-bootstrap/Row"; // Bootstrap row
+import Col from "react-bootstrap/Col"; // Bootstrap column
+import Button from "react-bootstrap/Button"; // Bootstrap button
+import InputGroup from "react-bootstrap/InputGroup"; // Bootstrap input group
+import FormControl from "react-bootstrap/FormControl"; // Bootstrap form control
+import ListGroup from "react-bootstrap/ListGroup"; // Bootstrap list group
+import { CSSTransition, TransitionGroup } from "react-transition-group"; // For animations
+import "./App.css"; // Import custom CSS for animations
 
+// Main App Component
 function App() {
+  // State for the user input and list of notes
   const [userInput, setUserInput] = useState("");
   const [list, setList] = useState([]);
 
+  // Updates user input state as they type
   const updateInput = (value) => {
     setUserInput(value);
   };
 
+  // Adds a new item to the list if input is not empty
   const addItem = () => {
     if (userInput.trim() !== "") {
       const newUserInput = {
-        id: Math.random(),
+        id: Math.random(), // Generates a unique ID for each item
         value: userInput,
       };
-      setList([...list, newUserInput]);
-      setUserInput("");
+      setList([...list, newUserInput]); // Adds new item to the list
+      setUserInput(""); // Clears the input field
     }
   };
 
+  // Deletes an item based on its unique ID
   const deleteItem = (key) => {
     const updatedList = list.filter((item) => item.id !== key);
-    setList(updatedList);
+    setList(updatedList); // Sets updated list without the deleted item
   };
 
+  // Edits an item: prompts the user to update the note text
   const editItem = (index) => {
     const editedTodo = prompt("Edit the todo:");
     if (editedTodo !== null && editedTodo.trim() !== "") {
       const updatedList = [...list];
-      updatedList[index].value = editedTodo;
-      setList(updatedList);
+      updatedList[index].value = editedTodo; // Updates the specified item
+      setList(updatedList); // Sets updated list
     }
   };
 
   return (
     <Container style={{ marginTop: "50px" }}>
+      {/* Title Row */}
       <Row
         style={{
           display: "flex",
@@ -61,6 +68,8 @@ function App() {
         </span>
       </Row>
       <hr style={{ borderTop: "3px solid #6c63ff", width: "60%" }} />
+
+      {/* Input Row */}
       <Row>
         <Col md={{ span: 6, offset: 3 }}>
           <InputGroup className="mb-3" style={{ boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)" }}>
@@ -72,9 +81,10 @@ function App() {
               style={{
                 borderRadius: "10px 0 0 10px",
                 borderColor: "#6c63ff",
-                animation: "pulse 1.5s infinite",
+                animation: "pulse 1.5s infinite", // Input pulse animation
               }}
             />
+            {/* ADD Button */}
             <Button
               variant="dark"
               style={{
@@ -84,7 +94,7 @@ function App() {
                 color: "white",
                 fontWeight: "bold",
                 fontSize: "1rem",
-                transition: "0.3s",
+                transition: "0.3s", // Smooth transition for hover effect
               }}
               onClick={addItem}
               onMouseEnter={(e) => (e.target.style.backgroundColor = "#5a52e5")}
@@ -95,9 +105,12 @@ function App() {
           </InputGroup>
         </Col>
       </Row>
+
+      {/* List Display Row */}
       <Row>
         <Col md={{ span: 6, offset: 3 }}>
           <TransitionGroup component={ListGroup}>
+            {/* Map over list to display each item */}
             {list.map((item, index) => (
               <CSSTransition key={item.id} timeout={500} classNames="fade">
                 <ListGroup.Item
@@ -111,13 +124,15 @@ function App() {
                     borderRadius: "8px",
                     boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
                     marginBottom: "10px",
-                    transition: "transform 0.2s",
+                    transition: "transform 0.2s", // Hover animation
                   }}
                   onMouseEnter={(e) => (e.target.style.transform = "scale(1.03)")}
                   onMouseLeave={(e) => (e.target.style.transform = "scale(1)")}
                 >
+                  {/* Display note text */}
                   {item.value}
                   <span>
+                    {/* Delete Button */}
                     <Button
                       variant="light"
                       style={{ marginRight: "10px", fontWeight: "bold" }}
@@ -125,6 +140,7 @@ function App() {
                     >
                       🗑️ Delete
                     </Button>
+                    {/* Edit Button */}
                     <Button
                       variant="light"
                       style={{ fontWeight: "bold" }}
